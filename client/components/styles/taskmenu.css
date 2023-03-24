@@ -1,0 +1,17 @@
+a:link, a:visited, a:active {
+    text-decoration:none;
+    outline:none !important;
+    color: black;
+    font-weight: 600;
+}
+
+#botonesInicio:hover{
+    background: rgb(226,226,226);
+    background: radial-gradient(circle, rgba(226,226,226,0.8800770308123249) 100%, rgba(50,50,50,0.8576680672268908) 100%);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+#botonesInicio{
+    background: rgb(226,226,226);
+background: radial-gradient(circle, rgba(226,226,226,0.4543067226890757) 100%, rgba(50,50,50,0.8576680672268908) 100%);
+}
