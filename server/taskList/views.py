@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, HttpResponseRedirect
 from .models import TaskList
 from .form import TaskListForm
@@ -39,4 +40,4 @@ def registerUserView(request):
         form = UserCreationForm()
         return JsonResponse({'token':csrf_token})
     
-    
+  
