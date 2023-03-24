@@ -1,0 +1,5 @@
+#backgroundImg{
+    background: rgb(226,226,226);
+    background: radial-gradient(circle, rgba(226,226,226,0.25262605042016806) 100%, rgba(50,50,50,0.8576680672268908) 100%);
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
