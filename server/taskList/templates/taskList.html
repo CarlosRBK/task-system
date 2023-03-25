@@ -22,11 +22,15 @@
             </div>
     <div>
     <div>
+        <ol>
         {% for taskList in task %}
-            <ul>
-                <li>Tarea: {{ taskList.name }} Asignado a: {{ taskList.assigned_to}}</li>
-            </ul>
+              <div>
+                <li>Tarea: {{ taskList.name }}</li>
+                <p>Asignado al usuario:  {{ taskList.assigned_to }}</p>
+                <p>Estado de la Tarea: {{ taskList.get_status_display }}</p>
+              </div>
         {% endfor %}
+        </ol>
     </div>
 </body>
 </html>

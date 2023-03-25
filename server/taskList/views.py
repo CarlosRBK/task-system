@@ -12,7 +12,7 @@ def taskListView(request):
     template_name = 'taskList.html'
     
     if request.method == 'GET':
-        task = TaskList.objects.select_related('assigned_to')
+        task = TaskList.objects.all()
         form = TaskListForm()
         return render(request, template_name, {'task':task,'form':form})
     
@@ -35,4 +35,9 @@ def registerUserView(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
     
-    
+
+def taskListUserView(request):
+    template_name = 'taskListUser.html'
+    user = request.user
+    tasks = TaskList.objects.filter(assigned_to=user).select_related('assigned_to')
+    return render(request, template_name, {'tasks': tasks})
