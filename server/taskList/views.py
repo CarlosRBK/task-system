@@ -1,43 +1,38 @@
-
-from django.shortcuts import render, HttpResponseRedirect
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from .models import TaskList
-from .form import TaskListForm
-from django.urls import reverse_lazy
-from django.middleware.csrf import get_token
-from django.contrib.auth.forms import UserCreationForm
+from .serializer import TaskSerializer, UserCreationFormSerializer, UserViewForm
 from django.contrib.auth.models import User
-from django.shortcuts import render
-from django.http import JsonResponse
 
-def taskListView(request):
-    template_name = 'taskList.html'
+class TaskListView(APIView):
+    def get(self, request):
+        tasks = TaskList.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        print(request.data)
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    if request.method == 'GET':
-        task = TaskList.objects.select_related('assigned_to')
-        form = TaskListForm()
-        return render(request, template_name, {'task':task,'form':form})
+
+class CreateUserView(APIView):
+    def get(self,request):
+        users = User.objects.all()
+        print(users)
+        serializer = UserViewForm(users, many=True)
+        return Response(serializer.data)
     
-    if request.method == 'POST':
-        template_name = reverse_lazy('taskList:taskList')
-        form = TaskListForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(template_name)
-        
-        
-def registerUserView(request):
-    print(request.POST)
-    template_name = reverse_lazy('taskList:taskList')
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        print(form)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(template_name)
-    else:
-        csrf_token = get_token(request)
-        print(csrf_token)
-        form = UserCreationForm()
-        return JsonResponse({'token':csrf_token})
     
-  
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = UserCreationFormSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

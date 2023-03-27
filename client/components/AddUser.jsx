@@ -16,7 +16,7 @@ const AddUser = () => {
     onSubmit: (values) => {
       console.log(values)
       const resp = axios.post(
-        "http://127.0.0.1:8000/registerUser/",
+        "http://127.0.0.1:8080/register/",
         values,
         { withCredentials: true }
       );
