@@ -35,7 +35,7 @@ const TaskMenu = () => {
             alignItems: "center",
           }}
         >
-          <Link to={""}>
+          <Link to={"add/task"}>
             Agregar Tareas
             <i className="bi bi-file-earmark-plus-fill mx-3"></i>
           </Link>
