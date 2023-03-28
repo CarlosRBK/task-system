@@ -1,4 +1,5 @@
 import { createBrowserRouter} from 'react-router-dom'
+import AddTask from '../components/AddTask';
 import AddUser from '../components/addUser';
 import Layout from '../layouts/Layout';
 import ErrorPage from '../screens/ErrorPage';
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
         {
           path: "add/user",
           element: <RegistrarUsuario />,
+        },
+        {
+          path: "add/task",
+          element: <AddTask />,
         },
       ],
     },

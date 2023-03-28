@@ -14,12 +14,14 @@ class UserViewForm(serializers.Serializer):
         model = User
         fields = "__all__"
         
-        
+
         
 class UserCreationFormSerializer(serializers.Serializer):
     username = serializers.CharField()
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
+    ciudad = serializers.CharField(write_only=True)
+    telefono = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
         form = UserCreationForm(validated_data)
