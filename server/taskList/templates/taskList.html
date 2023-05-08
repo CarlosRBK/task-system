@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
 {% block title %}{% endblock title %}
 {% block head %}
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
     <script src="{% static 'js/funcionDataTable.js'%}"></script>
 {% endblock head %}
 
 
 {% block content %}
 <div class="container-fluid">
+  <div class="contenido">
     {% csrf_token %}
     <table id="table_category"  class="table table-striped table-bordered" style="width:100%">
         <thead>
@@ -17,8 +20,8 @@
                 <th>Tarea</th>
                 <th>Asignado</th>
                 <th>Estado</th>
-                <th>Fecha/Hora Creacion</th>
-                <th>Fecha/Hora Ult. Modificacion</th>
+                <th>Creado</th>
+                <th>Modificado</th>
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -26,8 +29,9 @@
     <button id="botonRegistrar" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCategory">Registrar categoria</button>
     <button id="botonActualizar" class="btn btn-success">Actualizar datos</button>
 </div>
+</div>
 <!-- Modal -->
-<div class="modal fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -58,7 +62,7 @@
   </div>
 {% comment %} ModalBody {% endcomment %}
 <div class="modal fade" id="modalView" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="tituloView"></h5>
@@ -67,37 +71,35 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="card-deck">
-            <div class="card">
-                <div class="card-header">
-                    <p id='tituloTarea'></p>
-                </div>
-                <div class="card-body">
-                    <p id="idTarea"></p>
-                    <p id="nombreTarea"></p>
-                    <p id="statusTarea"></p>
-                    <p id="fechaCreacion"></p>
-                    <p id="fechaModificacion"></p>
-                </div>
+        <div class='tituloDetalles'>
+            <div>
+              Detalles de la Tarea
             </div>
-            <div class="card">
-                <div class="card-header">
-                    Tarea #2
-                </div>
-                <div class="card-body">
-                    <p>Estado: Completada</p>
-                    <p>Fecha de creación: 03/01/2022</p>
-                    <p>Fecha de modificación: 04/01/2022</p>
-                    <p>Asignado a: María González</p>
-                    <p>Teléfono: 87654321</p>
-                    <p>Dirección: Calle Falsa 123</p>
-                </div>
+            <div>
+              Usuario asignado
             </div>
         </div>
-    </div>
-    
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Atras</button>
+        <div class="contentDetalles">
+            <div>
+              <ul>
+                <li>Nombre:  <span id='nombreTarea'></span></li>
+                <li>Estado:  <span id="statusTarea"></span></li>
+                <li>Creacion:  <span id="fechaCreacion"></span></li>
+                <li>Modificacion:  <span id="fechaModificacion"></span></li>
+              </ul>
+            </div>
+            <div>
+              <ul>
+                <li>Usuario:  <span id="nombreUsuario"></span></li>
+                <li>Telefono:  <span id="telefonoUsuario"></span></li>
+                <li>Direccion:  <span id="direccionUsuario"></span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Atras</button>
+        </div>
       </div>
     </div>
   </div>
@@ -118,11 +120,12 @@
         function(){
           $('#modalCategory').modal('hide')
           Swal.fire({
-            position: 'top-end',
+            position: 'bottom-end',
             icon: 'success',
-            title: 'La tarea se ha guardado exitosamente',
+            title: 'La tarea se ha creado exitosamente',
             showConfirmButton: false,
-            timer: 1500
+            timer: 2000
+
           })
           $('#table_category').DataTable().ajax.reload();
          })

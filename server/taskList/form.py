@@ -9,7 +9,7 @@ class TaskListForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'form-control'
+                'class': 'form-control',
             }),
             'assigned_to': forms.Select(attrs={
                 'class': 'form-control'

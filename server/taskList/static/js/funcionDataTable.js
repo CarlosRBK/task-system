@@ -18,9 +18,19 @@ document.addEventListener('DOMContentLoaded', function (){
                     {'data': [3]},
                     {'data': [4]},
                     {'data': [5]},
-                    {'data': [0]}
+                    {'data': [0]},
+                    {'data': [6]},
+                    {'data': [7]},
                 ],
                 "columnDefs": [ 
+                  {
+                    "targets":7,
+                    "visible": false
+                  },
+                  {
+                    "targets":8,
+                    "visible": false
+                  },
                 {
                     "targets": 6,
                     "render": function ( data, type, row ) {
@@ -92,11 +102,12 @@ document.addEventListener('DOMContentLoaded', function (){
                       })
                     }else{
                       Swal.fire({
-                        position: 'top-end',
+                        position: 'bottom-end',
                         icon: 'success',
                         title: 'La tarea se ha eliminado exitosamente',
                         showConfirmButton: false,
                         timer: 2000
+
                       })
                       table.ajax.reload();
                       return false;
@@ -116,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function (){
             $('#table_category tbody').on('click', 'button[rel="view"]', 'tr', function(){
               var tr = table.cell($(this).closest('td,li')).index().row;
               var data = table.row(tr).data();
+              console.log(data)
               $('#modalView').modal('show');
               $('#modalCategory form')[0].reset();
               $('input[name="name"]').val(data[1]);
@@ -123,11 +135,15 @@ document.addEventListener('DOMContentLoaded', function (){
               $('#id_assigned_to').val('1');
               $('input[name="action"]').val('edit');
               $('#tituloView').text('Datos Generales');
-              $('#idTarea').text('Id:\n',data[0]);
-              $('#nombreTarea').text('Tarea\n',data[1]);
-              $('#statusTarea').text('Estado de la Tarea\n',data[3]);
-              $('#fechaCreacion').text('Fecha de Creacion\n',data[4]);
-              $('#fechaModificacion').text('Ultima Modificacion\n',data[5]);
+              $('#tituloTarea').text(`Tarea Id: ${data[0]}`);
+              $('#nombreTarea').text(data[1]);
+              $('#statusTarea').text(data[3]);
+              $('#fechaCreacion').text(data[4]);
+              $('#fechaModificacion').text(data[5]);
+              $('#tituloUser').text(`Usuario: ${data[2]}`)
+              $('#nombreUsuario').text(data[6]);
+              $('#telefonoUsuario').text(data[7]);
+              $('#direccionUsuario').text(data[8]);
             });
 })
 
