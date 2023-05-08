@@ -1,10 +1,75 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import TaskList
-from .serializer import TaskSerializer, UserCreationFormSerializer, UserViewForm
-from django.contrib.auth.models import User
+from .models import TaskList, CustomUser
+from .serializer import TaskSerializer, UserCreationForm
 
+# Importaciones para la vista en django
+from django.shortcuts import render
+from django.http import JsonResponse
+from .form import TaskListForm
+from django.contrib.auth.decorators import login_required
+
+
+
+def listTasksView(request):
+    if request.method == 'GET':
+        form = TaskListForm()
+        return render(request, 'taskList.html', {'title': 'Tasks', 'form':form})
+    
+    if request.method == 'POST':
+        try:
+            data = {}
+            action = request.POST['action']
+            if action == 'search':
+                tasks = TaskList.objects.all()
+                list = []
+                for task in tasks:
+                    list.append([
+                            task.id,
+                            task.name,
+                            task.assigned_to.username,
+                            task.get_status_display(),
+                            task.created_at.strftime('Fecha: %d/%m/%y Hora: %H:%M:%S'),
+                            task.updated_at.strftime('Fecha: %d/%m/%y Hora:  %H:%M:%S'),
+                            f'{task.assigned_to.first_name} {task.assigned_to.last_name}' if len(f'{task.assigned_to.first_name} {task.assigned_to.last_name}') > 5 else "Vacio",
+                            task.assigned_to.phone_number,
+                            task.assigned_to.address if len(task.assigned_to.address) > 2 else "Vacio",           
+                        ])
+                print(list)
+                return JsonResponse(list, safe=False)
+            elif action == 'cargar':
+                form = TaskListForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return JsonResponse(data, safe=False)
+                else:
+                    data['error'] = form.errors
+                    return JsonResponse(data,safe=False)
+            elif action == 'edit':
+                pk = request.POST['id']
+                objeto = TaskList.objects.get(pk=pk)
+                form = TaskListForm(request.POST, instance=objeto)
+                if form.is_valid():
+                    form.save()
+                    return JsonResponse(data, safe=False)
+                else:
+                    data['error'] = form.errors
+                    return JsonResponse(data,safe=False)
+            elif action == 'delete':
+                try:
+                    pk = request.POST['data']
+                    objeto = TaskList.objects.get(pk=pk)
+                    objeto.delete()
+                    return JsonResponse(data, safe=False)
+                except Exception as e:
+                    data['error'] = f'Error de excepcion en el servidor: {str(e)}'
+                    return JsonResponse(data,safe=False)
+        except Exception as e:
+            data['error'] = str(e)
+            return JsonResponse(data, safe=False)
+
+# Vistas RestApi
 class TaskListView(APIView):
     def get(self, request):
         tasks = TaskList.objects.all()
@@ -22,15 +87,14 @@ class TaskListView(APIView):
 
 class CreateUserView(APIView):
     def get(self,request):
-        users = User.objects.all()
+        users = CustomUser.objects.all()
+        serializer = UserCreationForm(users, many=True)
         print(users)
-        serializer = UserViewForm(users, many=True)
         return Response(serializer.data)
     
     
     def post(self, request, *args, **kwargs):
-        print(request.data)
-        serializer = UserCreationFormSerializer(data=request.data)
+        serializer = UserCreationForm(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)

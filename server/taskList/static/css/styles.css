@@ -1,0 +1,35 @@
+*{
+    margin: 0px;
+}
+body{
+    background-color: #f2f5f8;
+}
+
+.contenido{
+    margin-top: 50px;
+}
+
+.tituloDetalles{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0;
+    color: rgb(10, 10, 10);
+}
+
+.contentDetalles{
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    margin: 0px;
+    color: rgb(14, 13, 13);
+}
+
+.contentDetalles div {
+    flex: 2 1;
+    padding: 10px;
+}
+
+.contentDetalles div ul li{
+    padding: 10px;
+}
