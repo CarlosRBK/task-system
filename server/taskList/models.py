@@ -17,7 +17,7 @@ class TaskList(models.Model):
     )
 
     name = models.CharField(max_length=255)
-    assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='tasks')
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

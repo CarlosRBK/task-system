@@ -70,16 +70,21 @@ def listTasksView(request):
             return JsonResponse(data, safe=False)
 
 # Vistas RestApi
+# APIView es una clase proporcionada por Django Rest Framework que se utiliza como base para definir vistas personalizadas.
 class TaskListView(APIView):
     def get(self, request):
         tasks = TaskList.objects.all()
+        # El argumento tasks se pasa como el objeto que se va a serializar, y many=True indica que hay varios objetos a serializar.
         serializer = TaskSerializer(tasks, many=True)
+        #es una propiedad que devuelve un diccionario de datos serializados.
+        print(serializer)
         return Response(serializer.data)
 
     def post(self, request):
-        print(request.data)
+        #estauramos esos tipos de datos nativos en un diccionario de datos validados. 
         serializer = TaskSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(): 
+            #True
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -89,7 +94,6 @@ class CreateUserView(APIView):
     def get(self,request):
         users = CustomUser.objects.all()
         serializer = UserCreationForm(users, many=True)
-        print(users)
         return Response(serializer.data)
     
     
