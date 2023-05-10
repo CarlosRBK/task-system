@@ -11,7 +11,6 @@ from .form import TaskListForm
 from django.contrib.auth.decorators import login_required
 
 
-
 def listTasksView(request):
     if request.method == 'GET':
         form = TaskListForm()
@@ -77,10 +76,10 @@ class TaskListView(APIView):
         # El argumento tasks se pasa como el objeto que se va a serializar, y many=True indica que hay varios objetos a serializar.
         serializer = TaskSerializer(tasks, many=True)
         #es una propiedad que devuelve un diccionario de datos serializados.
-        print(serializer)
         return Response(serializer.data)
 
     def post(self, request):
+        print(request.data)
         #estauramos esos tipos de datos nativos en un diccionario de datos validados. 
         serializer = TaskSerializer(data=request.data)
         if serializer.is_valid(): 
@@ -91,12 +90,13 @@ class TaskListView(APIView):
     
 
 class CreateUserView(APIView):
+    
     def get(self,request):
         users = CustomUser.objects.all()
         serializer = UserCreationForm(users, many=True)
         return Response(serializer.data)
-    
-    
+
+
     def post(self, request, *args, **kwargs):
         serializer = UserCreationForm(data=request.data)
         if serializer.is_valid():
@@ -104,3 +104,4 @@ class CreateUserView(APIView):
             return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
