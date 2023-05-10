@@ -5,14 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 import "./styles/adduser.css";
 
 const AddUser = () => {
+
   const navigate = useNavigate();
   const { handleSubmit, handleChange } = useFormik({
     initialValues: {
       username: "",
-      password1: "",
-      password2: "",
-      telefono: 0,
-      ciudad: "",
+      first_name: '',
+      last_name: ' ',
+      password: "",
+      phone_number: 0,
+      address: "",
     },
     onSubmit: (values) => {
       console.log(values);
@@ -103,10 +105,10 @@ const AddUser = () => {
             </label>
             <input
               className="form-control item"
-              id="password1"
+              id="password"
               type="password"
               placeholder="Contraseña"
-              name="password1"
+              name="password"
               onChange={handleChange}
             />
           </div>
@@ -117,14 +119,14 @@ const AddUser = () => {
               className="form-label mt-3"
               style={{ fontWeight: "bold" }}
             >
-              Confirmar contraseña
+              Ciudad
             </label>
             <input
               className="form-control item"
-              id="password2"
-              type="password"
-              placeholder="Confirmar Contraseña"
-              name="password2"
+              id="address"
+              type="string"
+              placeholder="Dirección"
+              name="address"
               onChange={handleChange}
             />
           </div>
@@ -153,14 +155,14 @@ const AddUser = () => {
               className="form-label mt-3"
               style={{ fontWeight: "bold" }}
             >
-              Ciudad
+              Numero
             </label>
             <input
               className="form-control item"
-              id="ciudad"
+              id="email"
               type="string"
-              placeholder="Ciudad"
-              name="ciudad"
+              placeholder="email"
+              name="email"
               onChange={handleChange}
             />
           </div>

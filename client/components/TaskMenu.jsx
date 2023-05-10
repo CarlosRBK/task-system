@@ -17,7 +17,7 @@ const TaskMenu = () => {
             alignItems: "center",
           }}
         >
-          <Link to={""}>
+          <Link to={"/tasklist"}>
             Ver Tareas
             <div>
               <i className="bi bi-list-task mx-3"></i>
