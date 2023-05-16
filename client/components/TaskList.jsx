@@ -31,18 +31,18 @@ const TaskList = () => {
     const respuestaFormateada = respuesta.data.map((item, index) => {
       item.created_at = dateFormat(item.created_at);
       item.updated_at = dateFormat(item.updated_at);
-      item.assigned_to = asignarUser(item.assigned_to);
+      // item.assigned_to = asignarUser(item.assigned_to);
       return item;
     });
     setTask(respuestaFormateada);
     console.log(respuestaFormateada)
   };
 
-  const asignarUser = (asignado) => {
-    if(asignado === "1"){
-        return 'Carlos'
-    }
-  }
+  // const asignarUser = (asignado) => {
+  //   if(asignado === "1"){
+  //       return 'Carlos'
+  //   }
+  // }
   
 
   const handleRedirect = (ruta) => {
@@ -80,11 +80,11 @@ const TaskList = () => {
       },
     },
     {
-      name: "status",
+      name: "status_display",
       label: "ESTADO",
     },
     {
-      name: "assigned_to",
+      name: "assigned_to_first_name",
       label: "ASIGNADO",
     },
     {

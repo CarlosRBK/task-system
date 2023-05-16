@@ -2,14 +2,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import TaskList, CustomUser
-from .serializer import TaskSerializer, UserCreationForm
+from .serializer import TaskListSerializer, TaskCreateSerializer, UserCreateSerializer, UserListSerializer
 
 # Importaciones para la vista en django
 from django.shortcuts import render
 from django.http import JsonResponse
 from .form import TaskListForm
 from django.contrib.auth.decorators import login_required
-
 
 
 def listTasksView(request):
@@ -72,35 +71,36 @@ def listTasksView(request):
 # Vistas RestApi
 # APIView es una clase proporcionada por Django Rest Framework que se utiliza como base para definir vistas personalizadas.
 class TaskListView(APIView):
-    def get(self, request):
-        tasks = TaskList.objects.all()
-        # El argumento tasks se pasa como el objeto que se va a serializar, y many=True indica que hay varios objetos a serializar.
-        serializer = TaskSerializer(tasks, many=True)
-        #es una propiedad que devuelve un diccionario de datos serializados.
-        print(serializer)
-        return Response(serializer.data)
+        def get(self, request):
+            tasks = TaskList.objects.all()
+            # El argumento tasks se pasa como el objeto que se va a serializar, y many=True indica que hay varios objetos a serializar.
+            serializer = TaskListSerializer(tasks, many=True)
+            #es una propiedad que devuelve un diccionario de datos serializados.
+            return Response(serializer.data)
 
-    def post(self, request):
-        #estauramos esos tipos de datos nativos en un diccionario de datos validados. 
-        serializer = TaskSerializer(data=request.data)
-        if serializer.is_valid(): 
-            #True
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+        def post(self, request):
+            #estauramos esos tipos de datos nativos en un diccionario de datos validados. 
+            serializer = TaskCreateSerializer(data=request.data)
+            if serializer.is_valid(): 
+                #True
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CreateUserView(APIView):
+    
     def get(self,request):
         users = CustomUser.objects.all()
-        serializer = UserCreationForm(users, many=True)
+        serializer = UserListSerializer(users, many=True)
         return Response(serializer.data)
-    
-    
+
+
     def post(self, request, *args, **kwargs):
-        serializer = UserCreationForm(data=request.data)
+        serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
