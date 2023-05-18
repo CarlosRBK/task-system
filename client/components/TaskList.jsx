@@ -14,7 +14,7 @@ const TaskList = () => {
 
   const getData = async () => {
     const dateFormat = (date) => {
-      return moment.utc(date).format("DD-MM-YYYY");
+      return moment.utc(date).format("D MMMM HH:mm");
     };
 
     const respuesta = await axios.get(`http://127.0.0.1:8000/taskList/`);
@@ -50,12 +50,16 @@ const TaskList = () => {
   };
 
   const eliminarDatos = async (id) => {
+    const data = { 
+      id: id,
+      action: 'delete',
+    };
     const confirmacion = window.confirm(
       "¿Estás seguro de que quieres eliminar estos datos? Esta acción no se puede deshacer."
     );
 
     if (confirmacion) {
-      const res = await axios.delete(`http://127.0.0.1:8000/taskList/${id}`);
+      const res = await axios.post(`http://127.0.0.1:8000/taskList/`, data);
       console.log(res.data);
       alert("Se han eliminado los datos con éxito.");
     }
@@ -88,7 +92,7 @@ const TaskList = () => {
       label: "ASIGNADO",
     },
     {
-      name: "_id",
+      name: "id",
       label: "ACCIONES",
       options: {
         filter: true,
@@ -111,7 +115,7 @@ const TaskList = () => {
               </button>
               <button
                 className="btn btn-danger ms-2"
-                onClick={() => eliminarDatos(tableMeta.rowData[6])}
+                onClick={() => eliminarDatos(tableMeta.rowData[4])}
               >
                 <i className="bi bi-trash3"></i>
               </button>

@@ -79,14 +79,36 @@ class TaskListView(APIView):
             return Response(serializer.data)
 
         def post(self, request):
-            #estauramos esos tipos de datos nativos en un diccionario de datos validados. 
-            serializer = TaskCreateSerializer(data=request.data)
-            if serializer.is_valid(): 
-                #True
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            data = {}
+            try: 
+                action = request.data.get('action')
+                if action == 'delete':
+                    pk = request.data.get('id')
+                    objeto = TaskList.objects.get(pk=pk)
+                    objeto.delete()
+                    tasks = TaskList.objects.all()
+                    serializer = TaskListSerializer(tasks, many=True)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                elif action == 'edit':
+                    pk = request.data.get('id')
+                    objeto = TaskList.objects.get(pk=pk)
+                    serializer = TaskCreateSerializer(objeto, data=request.data)
+                    if serializer.is_valid(): 
+                        #True
+                        serializer.save()
+                        return Response(serializer.data, status=status.HTTP_201_CREATED)
+                #estauramos esos tipos de datos nativos en un diccionario de datos validados.             
+                # task = TaskList.objects.get(pk=pk)
+                elif action == 'create': 
+                    serializer = TaskCreateSerializer(data=request.data)
+                    if serializer.is_valid(): 
+                    #True
+                        serializer.save()
+                        return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                data['error'] = str(e)
+                return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateUserView(APIView):
     
